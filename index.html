@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>荷马史诗 · 闪卡</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="theme-color" content="#ffffff">
+  <style>
+    :root {
+      --bg: #fafafa;
+      --card-bg: #ffffff;
+      --text: #1a1a1a;
+      --text-secondary: #6b7280;
+      --text-tertiary: #9ca3af;
+      --border: #e5e7eb;
+      --accent: #8b7355;
+      --accent-light: #f5f0eb;
+      --tag-bg: #f3f4f6;
+      --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-lg: 0 4px 16px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+      --radius: 12px;
+      --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    /* ── Header ── */
+    .header {
+      padding: 16px 20px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .header-title {
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+    .header-title span { color: var(--accent); }
+    .header-counter {
+      font-size: 13px;
+      color: var(--text-tertiary);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ── Filter Bar ── */
+    .filter-bar {
+      padding: 0 20px 12px;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      flex-shrink: 0;
+    }
+    .filter-bar::-webkit-scrollbar { display: none; }
+    .filter-chip {
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      white-space: nowrap;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all var(--transition);
+      flex-shrink: 0;
+    }
+    .filter-chip.active {
+      background: var(--text);
+      color: var(--card-bg);
+      border-color: var(--text);
+    }
+
+    /* ── Card Area ── */
+    .card-area {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 20px;
+      perspective: 1200px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .card-container {
+      width: 100%;
+      max-width: 400px;
+      aspect-ratio: 3 / 4;
+      max-height: calc(100dvh - 220px);
+      position: relative;
+      transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .card-container.flipped .card-inner {
+      transform: rotateY(180deg);
+    }
+    .card-container.swipe-left { transform: translateX(-120%) rotate(-8deg); opacity: 0; }
+    .card-container.swipe-right { transform: translateX(120%) rotate(8deg); opacity: 0; }
+
+    .card-inner {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .card-face {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border);
+      padding: 28px 24px;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+    .card-face::-webkit-scrollbar { width: 2px; }
+    .card-face::-webkit-scrollbar-thumb { background: var(--border); border-radius: 1px; }
+
+    .card-back {
+      transform: rotateY(180deg);
+    }
+
+    .card-type {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .card-title-cn {
+      font-size: 26px;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 6px;
+      letter-spacing: -0.02em;
+    }
+    .card-title-en {
+      font-size: 15px;
+      color: var(--text-secondary);
+      font-style: italic;
+      margin-bottom: 20px;
+    }
+
+    .card-body {
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--text);
+      flex: 1;
+    }
+    .card-body p { margin-bottom: 12px; }
+
+    .card-anchor {
+      margin-top: auto;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+    .card-anchor-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .card-anchor-text {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+    .card-tag {
+      font-size: 11px;
+      padding: 3px 8px;
+      background: var(--tag-bg);
+      border-radius: 4px;
+      color: var(--text-tertiary);
+    }
+
+    .flip-hint {
+      position: absolute;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 12px;
+      color: var(--text-tertiary);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      opacity: 0.6;
+    }
+    .flip-hint svg { width: 14px; height: 14px; }
+
+    /* ── Footer Controls ── */
+    .footer {
+      padding: 12px 20px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+
+    .nav-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all var(--transition);
+      box-shadow: var(--shadow);
+    }
+    .nav-btn:active { transform: scale(0.92); }
+    .nav-btn svg { width: 20px; height: 20px; color: var(--text-secondary); }
+
+    .shuffle-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .shuffle-btn:active { transform: scale(0.92); }
+    .shuffle-btn.active { background: var(--text); border-color: var(--text); }
+    .shuffle-btn.active svg { color: var(--card-bg); }
+    .shuffle-btn svg { width: 18px; height: 18px; color: var(--text-secondary); }
+
+    .progress-bar {
+      flex: 1;
+      max-width: 160px;
+      height: 3px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 2px;
+      transition: width var(--transition);
+    }
+
+    /* ── Empty State ── */
+    .empty-state {
+      text-align: center;
+      color: var(--text-tertiary);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+    .empty-state-icon { font-size: 40px; margin-bottom: 12px; }
+
+    /* ── Animations ── */
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .card-container { animation: slideIn 0.4s ease-out; }
+
+    /* ── Safe area for notched phones ── */
+    @supports (padding-bottom: env(safe-area-inset-bottom)) {
+      .footer { padding-bottom: calc(20px + env(safe-area-inset-bottom)); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="header-title">荷马史诗 <span>· 闪卡</span></div>
+    <div class="header-counter" id="counter">1 / 6</div>
+  </div>
+
+  <div class="filter-bar" id="filterBar">
+    <div class="filter-chip active" data-filter="all">全部</div>
+    <div class="filter-chip" data-filter="character">人物</div>
+    <div class="filter-chip" data-filter="concept">概念</div>
+    <div class="filter-chip" data-filter="伊利亚特">伊利亚特</div>
+    <div class="filter-chip" data-filter="奥德赛">奥德赛</div>
+  </div>
+
+  <div class="card-area" id="cardArea">
+    <div class="card-container" id="cardContainer">
+      <div class="card-inner" id="cardInner">
+        <div class="card-face card-front" id="cardFront"></div>
+        <div class="card-face card-back" id="cardBack"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <button class="nav-btn" id="prevBtn" aria-label="上一张">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+    </button>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <button class="shuffle-btn" id="shuffleBtn" aria-label="随机">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line><line x1="4" y1="4" x2="9" y2="9"></line></svg>
+    </button>
+    <button class="nav-btn" id="nextBtn" aria-label="下一张">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+    </button>
+  </div>
+
+<script>
+// ═══════════════════════════════════════
+// Flashcard Data
+// ═══════════════════════════════════════
+const CARDS = [
+  {
+    id: "eris",
+    titleCn: "厄里斯",
+    titleEn: "Eris",
+    type: "character",
+    typeLabelCn: "人物",
+    typeLabelEn: "Character",
+    book: "伊利亚特",
+    tags: ["人物", "神话"],
+    frontBody: `不和女神厄里斯 — 婚宴上投下刻有「献给最美者」的金苹果，引发赫拉、雅典娜、阿佛洛狄忒三女神之争，间接导致特洛伊战争。`,
+    backBody: `Eris, Goddess of Discord — Cast a golden apple inscribed "For the Fairest" at a divine wedding, sparking a rivalry among Hera, Athena, and Aphrodite that indirectly caused the Trojan War.`,
+    anchor: `厄里斯 ≈ Error — 不正面攻击，而是利用系统漏洞（虚荣）触发自毁程序。`
+  },
+  {
+    id: "paris",
+    titleCn: "帕里斯",
+    titleEn: "Paris",
+    type: "character",
+    typeLabelCn: "人物",
+    typeLabelEn: "Character",
+    book: "伊利亚特",
+    tags: ["人物"],
+    frontBody: `帕里斯（亚历山大）— 特洛伊王子，因选择阿佛洛狄忒为最美女神而获得海伦，直接引发战争。性格矛盾体：虚荣却怯懦，敢在安全距离内挑衅却不敢真打。`,
+    backBody: `Paris (Alexandros) — Trojan prince who chose Aphrodite as the fairest goddess and was rewarded with Helen, directly triggering the war. A walking paradox: vain yet cowardly, provocative only from a safe distance.`,
+    anchor: `Paris = 远程挑衅者 — 古希腊版"键盘侠"，安全距离内嘴炮无敌，近身就秒怂。`
+  },
+  {
+    id: "pandarus",
+    titleCn: "潘达罗斯",
+    titleEn: "Pandarus",
+    type: "character",
+    typeLabelCn: "人物",
+    typeLabelEn: "Character",
+    book: "伊利亚特",
+    tags: ["人物", "地缘"],
+    frontBody: `潘达罗斯 — 吕基亚弓箭手，被化装为凡人的雅典娜蛊惑，在休战期间射伤墨涅拉俄斯，成为破坏和平的"耗材代理人"。`,
+    backBody: `Pandarus — A Lycian archer manipulated by Athena (disguised as a mortal) into shooting Menelaus during a truce, becoming a disposable proxy who shattered the peace.`,
+    anchor: `Pandarus = "useful idiot"（有用的白痴）— 大国博弈中甘愿当枪的小人物。`
+  },
+  {
+    id: "athena",
+    titleCn: "雅典娜",
+    titleEn: "Athena",
+    type: "character",
+    typeLabelCn: "人物",
+    typeLabelEn: "Character",
+    book: "伊利亚特",
+    tags: ["人物", "神话"],
+    frontBody: `雅典娜 — 智慧与战争女神，坚定的"灭特派"。暗中拨偏潘达罗斯射向墨涅拉俄斯的箭（不让他死），同时确保特洛伊方背上"毁约"的罪名。不直接动手，而是操控规则。`,
+    backBody: `Athena — Goddess of wisdom and war, firmly anti-Troy. She subtly deflected Pandarus's arrow to wound (not kill) Menelaus, ensuring Troy bore the blame of breaking the truce. She doesn't break rules — she makes others break them.`,
+    anchor: `Athena = 规则黑客 — 她从不犯规，她只是让你"主动"犯规。终极法务型选手。`
+  },
+  {
+    id: "golden_apple",
+    titleCn: "金苹果比较陷阱",
+    titleEn: "The Golden Apple Trap",
+    type: "concept",
+    typeLabelCn: "概念",
+    typeLabelEn: "Concept",
+    book: "伊利亚特",
+    tags: ["概念", "神话"],
+    frontBody: `金苹果 = 比较陷阱。厄里斯的天才在于：她不需要亲自战斗，只需制造一个"谁是最好的"标准。自我系统（Ego）会自动运行并自我毁灭。这是最高效的破坏——让目标自己消耗自己。`,
+    backBody: `The Golden Apple = A Comparison Trap. Eris's genius: she didn't need to fight. She only needed to create a metric of "who is the best" — the Ego would then auto-execute and self-destruct. The most efficient destruction makes the target consume itself.`,
+    anchor: `现代版金苹果 = 社交媒体的点赞数/排名/KPI — 一个"谁是最好的"框架，让所有参与者自动内卷到崩溃。`
+  },
+  {
+    id: "first_shot",
+    titleCn: "第一枪的道德红利",
+    titleEn: "The Moral Dividend of the First Shot",
+    type: "concept",
+    typeLabelCn: "概念",
+    typeLabelEn: "Concept",
+    book: "伊利亚特",
+    tags: ["概念", "地缘"],
+    frontBody: `第一枪的道德红利 — 雅典娜操控潘达罗斯射出"第一箭"，让希腊方获得"对方毁约"的正义叙事。谁先动手，谁在道义上就输了；而"被打"的一方获得全面反击的合法性。`,
+    backBody: `The Moral Dividend of the First Shot — Athena engineered Pandarus's "first shot" so that Greece could claim the moral high ground of "they broke the truce." Whoever strikes first loses the narrative; the "victim" gains legitimacy for total war.`,
+    anchor: `历史上"被迫还手"的叙事是最强大的战争动员工具。类比：珍珠港、卢沟桥。`
+  },
+  {
+    id: "menelaus",
+    titleCn: "墨涅拉俄斯",
+    titleEn: "Menelaus",
+    type: "character",
+    typeLabelCn: "人物",
+    typeLabelEn: "Character",
+    book: "伊利亚特",
+    tags: ["人物"],
+    frontBody: `墨涅拉俄斯 — 斯巴达国王，海伦的合法丈夫，阿伽门农的弟弟。在与帕里斯的阵前单挑中展现出压倒性的武力优势（帕里斯"秒怂"），是希腊方发动战争的直接苦主。`,
+    backBody: `Menelaus — King of Sparta, Helen's legal husband, and brother of Agamemnon. Displayed overwhelming martial superiority in the duel against Paris (who was terrified); he is the direct victim who initiated the Greek's war effort.`,
+    anchor: `Menelaus = 苦主战士 — 绿帽子不仅要靠自己摘，还要亲自把对方打到怀疑人生。`
+  },
+  {
+    id: "achilles",
+    titleCn: "阿喀琉斯",
+    titleEn: "Achilles",
+    type: "character",
+    typeLabelCn: "人物",
+    typeLabelEn: "Character",
+    book: "伊利亚特",
+    tags: ["人物"],
+    frontBody: `阿喀琉斯 — 希腊联军中最伟大的英雄。他的"罢工"退出战斗，导致长达十年围城的联军失去了强攻城池的底气与战力，逼迫希腊军方必须同意帕里斯提出的单挑决胜负以"止损"。`,
+    backBody: `Achilles — The greatest hero of the Greek army. His "strike" (withdrawal from battle) sapped the Greeks' confidence and combat power in the tenth year of the siege, forcing them to accept Paris's duel to cut their losses.`,
+    anchor: `Achilles = 核心DPS罢工 — 相当于公司的技术骨干突然离职，团队失去了强攻的底气，瞬间只能寻找单挑这样的快速方案止损。`
+  },
+  {
+    id: "hera",
+    titleCn: "赫拉",
+    titleEn: "Hera",
+    type: "character",
+    typeLabelCn: "人物",
+    typeLabelEn: "Character",
+    book: "伊利亚特",
+    tags: ["人物", "神话"],
+    frontBody: `赫拉 — 天后，主神宙斯的妻子。因为在"金苹果事件"中输给阿佛洛狄忒，从而对特洛伊恨之入骨。她拒绝任何以和平收场的休战协议，是神明中典型的"鹰派"，要求特洛伊城必须彻底毁灭。`,
+    backBody: `Hera — Queen of the gods, wife of Zeus. Consumed by hatred for Troy after losing the "Golden Apple" judgment. She vehemently rejects any peaceful resolution and represents the ultimate "hawk" among the gods, demanding the total destruction of Troy.`,
+    anchor: `Hera = 终极鹰派 — 宁肯掀翻棋盘也要把对手踩在脚下的"复仇女王"，代表了战争中绝对不妥协的破坏欲。`
+  },
+  {
+    id: "tenth_year_siege",
+    titleCn: "第十年（十年围城）",
+    titleEn: "The Tenth Year",
+    type: "concept",
+    typeLabelCn: "概念",
+    typeLabelEn: "Concept",
+    book: "伊利亚特",
+    tags: ["时间", "概念"],
+    frontBody: `第十年 / 十年围城 — 《伊利亚特》故事开篇所处的关键时间节点。长达十年的拉锯战导致希腊联军军心涣散、厌战情绪高涨（甚至出现集体跑路倾向）。这也解释了为何希腊将领轻易同意了帕里斯的单挑止损方案。`,
+    backBody: `The Tenth Year (Ten Years of Siege) — The precise timeframe when the Iliad begins. A decade of grinding stalemate drained morale and induced extreme war-weariness (even mass desertion threats) among the Greeks, explaining why their commanders eagerly agreed to the duel to try and end the war swiftly.`,
+    anchor: `第十年 = 崩溃临界点 — 无论是大公司拉锯项目还是古代围城，拖到第十年，所有人脑子里都只有一个念头：赶紧止损下班！`
+  },
+  {
+    id: "agamemnon",
+    titleCn: "阿伽门农",
+    titleEn: "Agamemnon",
+    type: "character",
+    typeLabelCn: "人物",
+    typeLabelEn: "Character",
+    book: "伊利亚特",
+    tags: ["人物"],
+    frontBody: `阿伽门农 — 希腊联军的总统帅，拥有名义上的最高权威，却常暴露出强烈的不安全感。在“假撤退”试探中，他想靠拙劣的逆向心理学测试军心，结果差点把全军真的送回家，暴露了他“权位大于掌控力”的领导危机。`,
+    backBody: `Agamemnon — Supreme commander of the Greek coalition. He holds formal authority but is riddled with insecurity. In the fake-retreat episode, he tried to test morale through clumsy reverse psychology and nearly sent the whole army home, exposing a gap between rank and real leadership.`,
+    anchor: `Agamemnon = title-rich, skill-poor 的老板型主帅 — 官最大，但一到危机时最先失控，最后还得靠真正能干活的人出来救场。`
+  },
+  {
+    id: "diomedes",
+    titleCn: "狄奥墨得斯",
+    titleEn: "Diomedes",
+    type: "character",
+    typeLabelCn: "人物",
+    typeLabelEn: "Character",
+    book: "伊利亚特",
+    tags: ["人物"],
+    frontBody: `狄奥墨得斯 — 《伊利亚特》第五卷最亮眼的希腊英雄之一。他的强大不只是“能打”，更在于极度克制：雅典娜让他打谁他就打谁，不让他越界他就立刻收手。正因这种守边界、听神意、不过度上头的纪律性，他才能成为少数真正“捅伤神明”的凡人。`,
+    backBody: `Diomedes — One of the most dazzling Greek heroes in Book 5. His greatness lies not only in strength but in discipline: he strikes exactly whom Athena permits and retreats when the limit is set. That restraint is what enables him to become one of the few mortals capable of wounding gods.`,
+    anchor: `Diomedes = 顶级执行型战神 — 不是莽夫式开无双，而是“权限清晰、边界明确、出手极狠”的高阶职业军人。`
+  },
+  {
+    id: "aphrodite",
+    titleCn: "阿佛洛狄忒",
+    titleEn: "Aphrodite",
+    type: "character",
+    typeLabelCn: "人物",
+    typeLabelEn: "Character",
+    book: "伊利亚特",
+    tags: ["人物", "神话"],
+    frontBody: `阿佛洛狄忒 — 爱与欲望女神，也是特洛伊阵营的重要后台。她因“金苹果事件”帮助帕里斯赢得海伦，又在战场上频频出手保人。她并不擅长正面硬刚战争，却持续用“欲望的力量”改写战争走向。`,
+    backBody: `Aphrodite — Goddess of love and desire, and a key divine backer of Troy. After helping Paris win Helen in the Golden Apple affair, she keeps intervening to protect Trojan interests. She is not a frontline war god, but she changes the course of war through desire rather than brute force.`,
+    anchor: `Aphrodite = 欲望系战略投资人 — 她不负责打仗，她负责把所有人拖进那场根本停不下来的仗。`
+  },
+  {
+    id: "apollo",
+    titleCn: "阿波罗",
+    titleEn: "Apollo",
+    type: "character",
+    typeLabelCn: "人物",
+    typeLabelEn: "Character",
+    book: "伊利亚特",
+    tags: ["人物", "神话"],
+    frontBody: `阿波罗 — 特洛伊阵营最关键的保护神之一，兼具神圣威严与远程打击属性。他不是那种靠暴怒硬砍的战神，而更像高位压制型选手：既能降灾，也能护人，在关键时刻为特洛伊战线兜底。`,
+    backBody: `Apollo — One of Troy's most important divine protectors, combining sacred authority with long-range destructive power. He is not a berserker war god; rather, he exerts high-level pressure, sends plagues, and shields key Trojan figures when the line is about to collapse.`,
+    anchor: `Apollo = 天启级远程支援位 — 平时高冷，真下场时就是“我不必贴身，我照样能决定战局”。`
+  },
+  {
+    id: "aeneias",
+    titleCn: "埃涅阿斯",
+    titleEn: "Aeneias",
+    type: "character",
+    typeLabelCn: "人物",
+    typeLabelEn: "Character",
+    book: "伊利亚特",
+    tags: ["人物"],
+    frontBody: `埃涅阿斯 — 特洛伊的重要英雄，也是阿佛洛狄忒之子。他在潘达罗斯被击杀后冲上去护尸，并不是“感情上头”，而是在履行战场上极其神圣的责任：绝不能让战友尸体和铠甲被敌人夺走。`,
+    backBody: `Aeneias — A major Trojan hero and son of Aphrodite. When Pandarus is killed, he rushes forward not out of blind emotion but to fulfill a sacred battlefield duty: never let a comrade's body and armor be captured by the enemy.`,
+    anchor: `Aeneias = 护尸职责第一人 — 在青铜时代战场上，保护尸体不是附加项，而是英雄信誉的底线。`
+  },
+  {
+    id: "double_motivation",
+    titleCn: "双重动因",
+    titleEn: "Double Motivation",
+    type: "concept",
+    typeLabelCn: "概念",
+    typeLabelEn: "Concept",
+    book: "伊利亚特",
+    tags: ["概念"],
+    frontBody: `双重动因 — 《伊利亚特》里“神在行动”和“人类心理/现实逻辑在行动”常常是同时成立的。雅典娜可以既是女神干预，也可以是理智回归；阿波罗的箭既是神罚，也可以读成瘟疫。神话层和现实层不是二选一，而是双层并行。`,
+    backBody: `Double Motivation — In the Iliad, divine action and human psychology often operate at the same time. Athena can be both a goddess intervening and a metaphor for restored reason; Apollo's arrows can be both divine punishment and epidemic disease. Mythic and realistic explanations run in parallel rather than canceling each other out.`,
+    anchor: `Double Motivation = 同一段剧情开两个解释器 — 一个是“神在推”，一个是“人心与现实在推”，两套系统同时运行。`
+  },
+  {
+    id: "mortality_boundary",
+    titleCn: "人神边界：必死性",
+    titleEn: "Mortality Boundary",
+    type: "concept",
+    typeLabelCn: "概念",
+    typeLabelEn: "Concept",
+    book: "伊利亚特",
+    tags: ["概念", "神话"],
+    frontBody: `人神真正的边界，不是血统，而是必死性。希腊神和人一样有情绪、有肉身、甚至能交配生子；真正绝对不同的是，神不会真正死去，而人只有一条命。也正因为此，神的打闹显得轻浮，人类的赴死才有真正的重量和悲剧性。`,
+    backBody: `The real boundary between gods and humans is mortality, not bloodline. Greek gods share bodies, emotions, and even reproduction with humans; the decisive difference is that gods do not truly die, while mortals only have one life. That is why divine conflict feels light, while human courage carries tragic gravity.`,
+    anchor: `Mortality = 全部意义的重力来源 — 神输血也还能回家吃饭，人一旦倒下就是真的没了。`
+  },
+  {
+    id: "body_ransom_war_law",
+    titleCn: "尸体争夺的战争法则",
+    titleEn: "Body, Armor, and Honor",
+    type: "concept",
+    typeLabelCn: "概念",
+    typeLabelEn: "Concept",
+    book: "伊利亚特",
+    tags: ["概念", "战争"],
+    frontBody: `战场上争夺尸体，不只是残忍，而是整套荣誉系统的核心。杀敌后剥下铠甲，是战功凭证；抢回战友尸体，是最神圣的义务；若尸体落入敌手、被狗啃食，则是最高等级的羞辱。青铜时代的“抢尸体”，本质上是在争夺荣誉、财产与灵魂的善终权。`,
+    backBody: `The struggle over bodies in battle is not mere brutality but the core of an entire honor system. Stripping armor proves victory, recovering a comrade's corpse is a sacred duty, and letting the enemy mutilate it is the deepest humiliation. In the Bronze Age, fighting over the dead means fighting over honor, wealth, and the soul's proper end.`,
+    anchor: `Body War Law = 战场上的遗体、装备、名声三位一体 — 抢回来的不是尸体本身，是一个人死后还能不能保住尊严。`
+  },
+  {
+    id: "homeric_greek",
+    titleCn: "荷马希腊语",
+    titleEn: "Homeric Greek",
+    type: "concept",
+    typeLabelCn: "概念",
+    typeLabelEn: "Concept",
+    book: "伊利亚特",
+    tags: ["概念", "语言"],
+    frontBody: `荷马希腊语不是某个城邦日常真正在说的话，而是一种为史诗吟唱服务的“拼贴语言”。它混合了多种方言和古旧表达，像是专门为了节奏、音节和史诗庄严感而编出来的一套高配口语系统。`,
+    backBody: `Homeric Greek was not simply the everyday speech of one city-state. It is a poetic composite language, blending dialects and archaic forms to serve rhythm, meter, and epic grandeur in oral performance.`,
+    anchor: `Homeric Greek = 为吟唱而生的“史诗编程语言” — 不求日常顺嘴，只求一开口就有史诗味和节拍感。`
+  },
+  {
+    id: "bronze_age_ruins",
+    titleCn: "青铜时代的废土回声",
+    titleEn: "Bronze Age Ruins",
+    type: "concept",
+    typeLabelCn: "概念",
+    typeLabelEn: "Concept",
+    book: "伊利亚特",
+    tags: ["概念", "历史"],
+    frontBody: `《伊利亚特》的故事设定在青铜时代末期，但成书于更晚的铁器时代。这意味着它并不是“现场直播”，而是黑暗时代之后的人回望一个已经崩塌的英雄世界。整部史诗因此带着一种强烈的“文明废墟回音感”。`,
+    backBody: `The Iliad is set in the late Bronze Age but composed much later in the Iron Age. It is not a live report but a backward gaze at a fallen heroic world after centuries of collapse, which gives the epic its haunting post-catastrophic tone.`,
+    anchor: `Bronze Age Ruins = 铁器时代的人在怀念已经炸没了的黄金时代 — 本质上是一种高级“废土文学”。`
+  },
+  {
+    id: "achaeans_danaans",
+    titleCn: "阿开奥斯人与达那奥斯人",
+    titleEn: "Achaeans and Danaans",
+    type: "concept",
+    typeLabelCn: "概念",
+    typeLabelEn: "Concept",
+    book: "伊利亚特",
+    tags: ["概念", "语言"],
+    frontBody: `阿开奥斯人、达那奥斯人、阿耳吉维人等称呼，在《伊利亚特》里大多都可理解为“希腊人”。这不是翻译混乱，而是因为当时并没有一个统一现代意义上的“希腊民族国家”概念；同时，诗人也需要不同称呼来配合吟唱节奏。`,
+    backBody: `Achaeans, Danaans, and Argives in the Iliad usually all refer to the Greek side. This is not random inconsistency: there was no modern unified Greek national identity yet, and the poet also needed multiple labels to fit the demands of oral meter.`,
+    anchor: `Achaeans/Danaans = “希腊方”的多个皮肤名 — 既是历史现实的松散联盟，也是诗歌节拍上的灵活零件。`
+  },
+  {
+    id: "dactylic_hexameter",
+    titleCn: "六步长短格",
+    titleEn: "Dactylic Hexameter",
+    type: "concept",
+    typeLabelCn: "概念",
+    typeLabelEn: "Concept",
+    book: "伊利亚特",
+    tags: ["概念", "文学"],
+    frontBody: `六步长短格是荷马史诗最核心的节奏骨架。它不是安静默读时最舒服的文体，而是为出声吟唱设计的：一行一行像鼓点一样往前推进，把故事变成既能记忆、又能表演的声音机器。`,
+    backBody: `Dactylic hexameter is the metrical backbone of Homeric epic. It is not optimized for silent reading but for oral performance: line after line drives forward like a rhythmic engine, making the story memorable and performable.`,
+    anchor: `Hexameter = 史诗的节拍器 — 文字不是摆着看的，而是拿来“打拍子往前冲”的。`
+  },
+  {
+    id: "homeric_simile",
+    titleCn: "荷马式比喻",
+    titleEn: "Homeric Simile",
+    type: "concept",
+    typeLabelCn: "概念",
+    typeLabelEn: "Concept",
+    book: "伊利亚特",
+    tags: ["概念", "文学"],
+    frontBody: `荷马式比喻是《伊利亚特》常见的高配修辞：不是简单说“像什么”，而是突然把画面拉远，用自然、动物或日常场景给战场动作做一整段平行镜头。它能把抽象情绪和战场状态变得极其可视、可感。`,
+    backBody: `A Homeric simile is not a quick decorative comparison but an extended parallel scene. Homer zooms out from battle and brings in weather, animals, or ordinary life to illuminate emotion and action with a vivid secondary image.`,
+    anchor: `Homeric Simile = 史诗版电影插镜头 — 正打得血肉横飞，作者忽然切到山风、云层和野兽，让你一下子“看见”那股力量。`
+  },
+  {
+    id: "olympian_parasite_class",
+    titleCn: "奥林波斯的寄生虫阶层",
+    titleEn: "Olympian Parasite Class",
+    type: "concept",
+    typeLabelCn: "概念",
+    typeLabelEn: "Concept",
+    book: "伊利亚特",
+    tags: ["概念", "神话"],
+    frontBody: `把奥林波斯诸神看作“寄生虫阶层”，是一种非常锋利但有效的理解方式：他们不承担凡人的死亡代价，却垄断自然权力、消费人类痛苦、把自己的政治交易转嫁给地面上的士兵去流血买单。`,
+    backBody: `Seeing the Olympian gods as a "parasite class" is a sharp but powerful lens: they bear none of the mortal cost of death, yet monopolize power, consume human suffering as spectacle, and outsource the price of their political deals to soldiers on the ground.`,
+    anchor: `Olympian Parasite Class = 永生特权阶层玩真人秀 — 楼上神仙吵架，楼下凡人拿命买单。`
+  },
+  {
+    id: "agamemnon_test_of_loyalty",
+    titleCn: "假撤退试探",
+    titleEn: "Agamemnon's Test of Loyalty",
+    type: "concept",
+    typeLabelCn: "概念",
+    typeLabelEn: "Concept",
+    book: "伊利亚特",
+    tags: ["概念", "政治"],
+    frontBody: `阿伽门农的“假撤退”是一次失败的忠诚度测试。他本想通过“我要撤军”来刺激士兵反向表忠心，结果大家真的一窝蜂冲向战船。这一幕说明：在长期厌战和核心英雄罢工的背景下，领导者如果脱离现实，心理操控会瞬间变成集体失控。`,
+    backBody: `Agamemnon's fake-retreat maneuver is a failed loyalty test. He hoped that announcing withdrawal would provoke the troops into demanding battle, but they rushed for the ships instead. The episode shows that under war-weariness and internal fracture, psychological manipulation can instantly collapse into mass disorder.`,
+    anchor: `Test of Loyalty = 老板想搞团建式试探，结果全员真的提桶跑路 — 一旦士气见底，任何“激将法”都可能玩脱。`
+  },
+  {
+    id: "theban_epigoni",
+    titleCn: "忒拜后嗣",
+    titleEn: "Epigoni",
+    type: "concept",
+    typeLabelCn: "概念",
+    typeLabelEn: "Concept",
+    book: "伊利亚特",
+    tags: ["概念", "神话"],
+    frontBody: `Epigoni（后嗣）指的是“七雄攻忒拜”失败后，由他们的儿子们组成的第二代复仇与完成者。和狂妄自毁的父辈不同，这一代更懂得节制与敬神。理解这层背景，才能看出狄奥墨得斯并非单纯猛将，而是“从父辈惨败中学会边界感”的新版英雄。`,
+    backBody: `The Epigoni are the sons of the failed "Seven Against Thebes," the second generation who returned to finish what their fathers could not. Unlike the arrogant fathers who destroyed themselves, they are marked by restraint and greater reverence for divine limits. This background deepens Diomedes as a new kind of hero.`,
+    anchor: `Epigoni = 父债子还的升级版 — 不是简单替父报仇，而是“吸取父辈教训后重新通关”的二周目英雄。`
+  }
+];
+
+// ═══════════════════════════════════════
+// App State
+// ═══════════════════════════════════════
+let currentIndex = 0;
+let filteredCards = [...CARDS];
+let isFlipped = false;
+let isShuffled = false;
+let touchStartX = 0;
+let touchStartY = 0;
+let isSwiping = false;
+
+// ═══════════════════════════════════════
+// DOM Elements
+// ═══════════════════════════════════════
+const cardContainer = document.getElementById('cardContainer');
+const cardFront = document.getElementById('cardFront');
+const cardBack = document.getElementById('cardBack');
+const counter = document.getElementById('counter');
+const progressFill = document.getElementById('progressFill');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const shuffleBtn = document.getElementById('shuffleBtn');
+const filterBar = document.getElementById('filterBar');
+const cardArea = document.getElementById('cardArea');
+
+// ═══════════════════════════════════════
+// Render
+// ═══════════════════════════════════════
+function renderCard(card) {
+  // Front (Chinese)
+  cardFront.innerHTML = `
+    <div class="card-type">${card.typeLabelCn} · ${card.book}</div>
+    <div class="card-title-cn">${card.titleCn}</div>
+    <div class="card-title-en">${card.titleEn}</div>
+    <div class="card-body"><p>${card.frontBody}</p></div>
+    <div class="card-anchor">
+      <div class="card-anchor-label">💡 记忆锚点</div>
+      <div class="card-anchor-text">${card.anchor}</div>
+    </div>
+    <div class="card-tags">${card.tags.map(t => `<span class="card-tag">#${t}</span>`).join('')}</div>
+    <div class="flip-hint">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-9L21 12m0 0l-4.5 4.5M21 12H7.5"/></svg>
+      点击翻转
+    </div>
+  `;
+
+  // Back (English)
+  cardBack.innerHTML = `
+    <div class="card-type">${card.typeLabelEn} · Iliad</div>
+    <div class="card-title-cn" style="font-size:22px">${card.titleEn}</div>
+    <div class="card-title-en">${card.titleCn}</div>
+    <div class="card-body"><p>${card.backBody}</p></div>
+    <div class="card-anchor">
+      <div class="card-anchor-label">💡 Memory Anchor</div>
+      <div class="card-anchor-text">${card.anchor}</div>
+    </div>
+    <div class="card-tags">${card.tags.map(t => `<span class="card-tag">#${t}</span>`).join('')}</div>
+    <div class="flip-hint">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-9L21 12m0 0l-4.5 4.5M21 12H7.5"/></svg>
+      Tap to flip
+    </div>
+  `;
+}
+
+function updateUI() {
+  if (filteredCards.length === 0) {
+    cardArea.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🏛️</div>当前筛选无结果<br>试试其他标签</div>`;
+    counter.textContent = '0 / 0';
+    progressFill.style.width = '0%';
+    return;
+  }
+
+  // Restore card area if it was replaced by empty state
+  if (!document.getElementById('cardContainer')) {
+    cardArea.innerHTML = `
+      <div class="card-container" id="cardContainer">
+        <div class="card-inner" id="cardInner">
+          <div class="card-face card-front" id="cardFront"></div>
+          <div class="card-face card-back" id="cardBack"></div>
+        </div>
+      </div>`;
+    // Re-bind references
+    Object.assign(window, {
+      cardContainer: document.getElementById('cardContainer'),
+      cardFront: document.getElementById('cardFront'),
+      cardBack: document.getElementById('cardBack')
+    });
+    bindCardTouch();
+  }
+
+  const card = filteredCards[currentIndex];
+  renderCard(card);
+  counter.textContent = `${currentIndex + 1} / ${filteredCards.length}`;
+  progressFill.style.width = `${((currentIndex + 1) / filteredCards.length) * 100}%`;
+
+  // Reset flip
+  isFlipped = false;
+  document.getElementById('cardContainer').classList.remove('flipped');
+}
+
+// ═══════════════════════════════════════
+// Navigation
+// ═══════════════════════════════════════
+function goNext() {
+  if (filteredCards.length === 0) return;
+  const container = document.getElementById('cardContainer');
+  container.classList.add('swipe-left');
+  setTimeout(() => {
+    currentIndex = (currentIndex + 1) % filteredCards.length;
+    container.style.transition = 'none';
+    container.classList.remove('swipe-left');
+    updateUI();
+    void container.offsetHeight;
+    container.style.transition = '';
+  }, 400);
+}
+
+function goPrev() {
+  if (filteredCards.length === 0) return;
+  const container = document.getElementById('cardContainer');
+  container.classList.add('swipe-right');
+  setTimeout(() => {
+    currentIndex = (currentIndex - 1 + filteredCards.length) % filteredCards.length;
+    container.style.transition = 'none';
+    container.classList.remove('swipe-right');
+    updateUI();
+    void container.offsetHeight;
+    container.style.transition = '';
+  }, 400);
+}
+
+function toggleFlip() {
+  const container = document.getElementById('cardContainer');
+  if (!container) return;
+  isFlipped = !isFlipped;
+  container.classList.toggle('flipped', isFlipped);
+}
+
+function toggleShuffle() {
+  isShuffled = !isShuffled;
+  shuffleBtn.classList.toggle('active', isShuffled);
+  if (isShuffled) {
+    filteredCards = [...filteredCards].sort(() => Math.random() - 0.5);
+  } else {
+    applyFilter(document.querySelector('.filter-chip.active')?.dataset.filter || 'all');
+  }
+  currentIndex = 0;
+  updateUI();
+}
+
+// ═══════════════════════════════════════
+// Filters
+// ═══════════════════════════════════════
+function applyFilter(filter) {
+  if (filter === 'all') {
+    filteredCards = [...CARDS];
+  } else if (filter === 'character' || filter === 'concept') {
+    filteredCards = CARDS.filter(c => c.type === filter);
+  } else {
+    filteredCards = CARDS.filter(c => c.book === filter);
+  }
+  if (isShuffled) {
+    filteredCards.sort(() => Math.random() - 0.5);
+  }
+  currentIndex = 0;
+  updateUI();
+}
+
+// ═══════════════════════════════════════
+// Touch / Click Handlers
+// ═══════════════════════════════════════
+function bindCardTouch() {
+  const area = document.getElementById('cardArea');
+  let touchHandled = false;
+
+  area.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+    isSwiping = false;
+  }, { passive: true });
+
+  area.addEventListener('touchmove', (e) => {
+    const dx = e.touches[0].clientX - touchStartX;
+    const dy = e.touches[0].clientY - touchStartY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 10) {
+      isSwiping = true;
+    }
+  }, { passive: true });
+
+  area.addEventListener('touchend', (e) => {
+    touchHandled = true;
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (isSwiping && Math.abs(dx) > 50) {
+      dx < 0 ? goNext() : goPrev();
+    } else if (!isSwiping) {
+      toggleFlip();
+    }
+    isSwiping = false;
+    setTimeout(() => { touchHandled = false; }, 400);
+  });
+
+  area.addEventListener('click', (e) => {
+    // Skip if touch already handled (prevents ghost click double-toggle)
+    if (touchHandled) return;
+    toggleFlip();
+  });
+}
+
+// ═══════════════════════════════════════
+// Keyboard
+// ═══════════════════════════════════════
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowLeft') goPrev();
+  else if (e.key === 'ArrowRight') goNext();
+  else if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggleFlip(); }
+});
+
+// ═══════════════════════════════════════
+// Event Binding
+// ═══════════════════════════════════════
+prevBtn.addEventListener('click', goPrev);
+nextBtn.addEventListener('click', goNext);
+shuffleBtn.addEventListener('click', toggleShuffle);
+
+filterBar.addEventListener('click', (e) => {
+  const chip = e.target.closest('.filter-chip');
+  if (!chip) return;
+  filterBar.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  chip.classList.add('active');
+  applyFilter(chip.dataset.filter);
+});
+
+// ═══════════════════════════════════════
+// Init
+// ═══════════════════════════════════════
+bindCardTouch();
+updateUI();
+</script>
+</body>
+</html>
