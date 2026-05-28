@@ -205,26 +205,18 @@
       border-radius: 4px;
       color: var(--text-tertiary);
     }
-    /* ── Character Portrait ── */
     .card-portrait {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      object-fit: cover;
-      object-position: center 15%;
+      width: 72px; height: 72px; border-radius: 50%;
+      object-fit: cover; object-position: center 15%;
       border: 2px solid var(--border);
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      margin-bottom: 12px;
-      flex-shrink: 0;
+      margin-bottom: 10px; flex-shrink: 0;
     }
     .card-header-row {
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
-      margin-bottom: 4px;
+      display: flex; align-items: flex-start; gap: 12px; margin-bottom: 4px;
     }
     .card-header-text { flex: 1; min-width: 0; }
-    .card-header-text .card-title-cn { margin-bottom: 4px; }
+    .card-header-text .card-title-cn { margin-bottom: 2px; }
     .card-header-text .card-title-en { margin-bottom: 0; }
 
 
@@ -713,6 +705,86 @@ const CARDS = [
     frontBody: `Epigoni（后嗣）指的是“七雄攻忒拜”失败后，由他们的儿子们组成的第二代复仇与完成者。和狂妄自毁的父辈不同，这一代更懂得节制与敬神。理解这层背景，才能看出狄奥墨得斯并非单纯猛将，而是“从父辈惨败中学会边界感”的新版英雄。`,
     backBody: `The Epigoni are the sons of the failed "Seven Against Thebes," the second generation who returned to finish what their fathers could not. Unlike the arrogant fathers who destroyed themselves, they are marked by restraint and greater reverence for divine limits. This background deepens Diomedes as a new kind of hero.`,
     anchor: `Epigoni = 父债子还的升级版 — 不是简单替父报仇，而是“吸取父辈教训后重新通关”的二周目英雄。`
+  },
+  {
+    id: "hector", image: "images/hector.png",
+    titleCn: "赫克托耳", titleEn: "Hector",
+    type: "character", typeLabelCn: "人物", typeLabelEn: "Character", book: "伊利亚特", tags: ["人物"],
+    frontBody: "赫克托耳 — 特洛伊的长子、全城最伟大的守护者。与阿喀琉斯不同，他的战斗不是为了个人荣耀，而是为了城邦与家人。他知道特洛伊终将陷落，却依然选择出战。他是《伊利亚特》中最具悲剧性的英雄：不是最强的，却是最清醒的。",
+    backBody: "Hector — Eldest son of Troy and its greatest defender. Unlike Achilles, he fights not for personal glory but for family and city. He knows Troy will fall, yet chooses to stand and fight. He is the Iliad's most tragic hero: not the strongest, but the most clear-eyed.",
+    anchor: "Hector = 明知必死仍出战的守护者 — 不是最能打的，但是最值得尊敬的。"
+  },
+  {
+    id: "odysseus", image: "images/odysseus.png",
+    titleCn: "奥德修斯", titleEn: "Odysseus",
+    type: "character", typeLabelCn: "人物", typeLabelEn: "Character", book: "伊利亚特", tags: ["人物"],
+    frontBody: "奥德修斯 — 伊塔卡国王，希腊联军中最狡猞的谋士。他不是靠蛮力取胜，而是靠话术、情报和策略。《伊利亚特》中他多次斜旋调停，是唯一能在阿喀琉斯和阿伽门农之间走钢丝的人。",
+    backBody: "Odysseus — King of Ithaca, the craftiest mind in the Greek coalition. He wins not by brute force but by rhetoric, intelligence, and strategy. In the Iliad he mediates between Achilles and Agamemnon — the only man who can walk the tightrope between them.",
+    anchor: "Odysseus = 脑力型核心 — 不靠拳头靠脑子，青铜时代的首席战略官。"
+  },
+  {
+    id: "ajax_great", image: "images/ajax_great.png",
+    titleCn: "大埃阿斯", titleEn: "Ajax the Greater",
+    type: "character", typeLabelCn: "人物", typeLabelEn: "Character", book: "伊利亚特", tags: ["人物"],
+    frontBody: "大埃阿斯（忒拉蒙之子）— 希腊方体型最庞大的战士，持一面七层牛皮巨盾，被称为“希腊之墙”。在阿喀琉斯罢工后，他是唯一能正面硬扛赫克托耳的人。纯粹的力量型英雄，不靠神助，只靠自己的身体和意志。",
+    backBody: "Ajax (son of Telamon) — The largest warrior among the Greeks, bearing a seven-layer oxhide shield, called 'the Wall of Greece.' After Achilles withdraws, he is the only one who can face Hector in direct combat. A pure strength hero — no divine backing, just body and will.",
+    anchor: "Ajax = 人形城墙 — 没有外挂，没有神助，纯靠肉身抗线的硬汉。"
+  },
+  {
+    id: "priam", image: "images/priam.png",
+    titleCn: "普里阿摩斯", titleEn: "Priam",
+    type: "character", typeLabelCn: "人物", typeLabelEn: "Character", book: "伊利亚特", tags: ["人物"],
+    frontBody: "普里阿摩斯 — 特洛伊老国王，赫克托耳的父亲。他最震撼的一幕在《伊利亚特》末尾：独自深夜前往敌营，亲吻杀死自己儿子的阿喀琉斯的手，请求归还赫克托耳的尸体。这一幕超越了战争本身，是全书最伟大的人性时刻。",
+    backBody: "Priam — Aged king of Troy, father of Hector. His most powerful moment comes at the Iliad's end: he enters the enemy camp alone at night, kisses the hands of the man who killed his son, and begs for Hector's body. It transcends war — the greatest moment of humanity in the entire epic.",
+    anchor: "Priam = 一个父亲的手 — 亲吻杀子仇人的手，不是屈服，是比战争更高的人性。"
+  },
+  {
+    id: "helen", image: "images/helen.png",
+    titleCn: "海伦", titleEn: "Helen",
+    type: "character", typeLabelCn: "人物", typeLabelEn: "Character", book: "伊利亚特", tags: ["人物"],
+    frontBody: "海伦 — “引发千帆出征的那张脸”。荷马笔下的海伦并非简单的“红颜祸水”：她清醒地知道自己是战争的导火索，自我厌恶，却无力改变命运。她对帕里斯没有真正的爱，更像是被神意绑架的人质。",
+    backBody: "Helen — 'The face that launched a thousand ships.' Homer's Helen is no simple femme fatale: she is painfully aware she is the cause of the war, full of self-loathing, yet powerless against fate. She has no real love for Paris — she is more a hostage of divine will.",
+    anchor: "Helen = 被命运绑架的清醒者 — 她知道一切因她而起，却只能眼睁睁看着。"
+  },
+  {
+    id: "patroclus", image: "images/patroclus.png",
+    titleCn: "帕特罗克洛斯", titleEn: "Patroclus",
+    type: "character", typeLabelCn: "人物", typeLabelEn: "Character", book: "伊利亚特", tags: ["人物"],
+    frontBody: "帕特罗克洛斯 — 阿喀琉斯最亲密的伴侣。他穿上阿喀琉斯的铠甲出战，一度扭转战局，却被赫克托耳击杀。他的死是全书的转折点：阿喀琉斯因此怒而复战，决定了特洛伊的命运。",
+    backBody: "Patroclus — Achilles' closest companion. He dons Achilles' armor and turns the tide of battle, only to be slain by Hector. His death is the Iliad's turning point: Achilles returns to battle in rage, sealing Troy's fate.",
+    anchor: "Patroclus = 用命换回战友的人 — 他的死不是终点，是阿喀琉斯复战的扳机。"
+  },
+  {
+    id: "nestor", image: "images/nestor.png",
+    titleCn: "涅斯托尔", titleEn: "Nestor",
+    type: "character", typeLabelCn: "人物", typeLabelEn: "Character", book: "伊利亚特", tags: ["人物"],
+    frontBody: "涅斯托尔 — 皮洛斯老王，希腊军中最年长的顾问。他最大的特点是“话多”：每次开会都要先讲一个自己年轻时的英雄故事，再给出建议。虽然常被嘲笑啰嗦，但他的经验和调解能力在关键时刻不可替代。",
+    backBody: "Nestor — King of Pylos, the oldest advisor in the Greek camp. His defining trait: he never gives advice without first telling a story from his youth. Often mocked for being long-winded, his experience and mediation skills are irreplaceable when crisis strikes.",
+    anchor: "Nestor = 万年老顾问 — “我年轻的时候…”开头的建议，虽然啰嗦但每次都对。"
+  },
+  {
+    id: "zeus", image: "images/zeus.png",
+    titleCn: "宙斯", titleEn: "Zeus",
+    type: "character", typeLabelCn: "人物", typeLabelEn: "Character", book: "伊利亚特", tags: ["人物", "神话"],
+    frontBody: "宙斯 — 众神之王，《伊利亚特》中唯一试图保持“中立”的神。他禁止其他神明直接参战，想让命运自行展开。但他自己也经不住赫拉的枕边风和忒提斯的哀求，反复摇摆。他是最高权力者，却也是最不自由的那个。",
+    backBody: "Zeus — King of the gods, the only deity in the Iliad who tries to stay neutral. He forbids direct divine intervention and wants fate to unfold naturally. But he cannot resist Hera's pleas or Thetis's supplication, wavering constantly. He holds supreme power yet is the least free of all.",
+    anchor: "Zeus = 想当中立裁判却做不到的最高领导 — 权力越大，越不自由。"
+  },
+  {
+    id: "thetis", image: "images/thetis.png",
+    titleCn: "忒提斯", titleEn: "Thetis",
+    type: "character", typeLabelCn: "人物", typeLabelEn: "Character", book: "伊利亚特", tags: ["人物", "神话"],
+    frontBody: "忒提斯 — 海洋女神，阿喀琉斯的母亲。她知道儿子注定早死（“要么短暂而光荣，要么漫长而平庸”），却无法改变命运。她能做的只有一次次上奥林波斯山求宙斯、请赫菲斯托斯锻造新铠甲。她是全书中最无力的母亲。",
+    backBody: "Thetis — Sea-goddess and mother of Achilles. She knows her son is doomed to die young ('short and glorious, or long and obscure') yet cannot change his fate. All she can do is climb Olympus to beg Zeus and commission Hephaestus for new armor. She is the most powerless mother in the epic.",
+    anchor: "Thetis = 知道结局却改变不了的母亲 — 全部的爱都化成了“能做的最后一件事”。"
+  },
+  {
+    id: "briseis", image: "images/briseis.png",
+    titleCn: "布里塞伊斯", titleEn: "Briseis",
+    type: "character", typeLabelCn: "人物", typeLabelEn: "Character", book: "伊利亚特", tags: ["人物"],
+    frontBody: "布里塞伊斯 — 原为特洛伊阵营阿波罗祭司之女，被希腊军保虍后成为阿喀琉斯的战利品。阿伽门农强行夺走她，直接触发阿喀琉斯的罢工。她是两个最强男人争端的焦点，却几乎没有自己的声音——她的沉默本身就是对战争最有力的控诉。",
+    backBody: "Briseis — Originally a priest's daughter from the Trojan side, captured by the Greeks and awarded to Achilles. When Agamemnon seizes her, it triggers Achilles' withdrawal. She is the focal point of the two most powerful men's quarrel, yet has almost no voice of her own — her silence is itself the strongest indictment of war.",
+    anchor: "Briseis = 沉默的焦点 — 两个男人为她翻脸，但她自己连说话的机会都没有。"
   }
 ];
 
@@ -746,13 +818,10 @@ const cardArea = document.getElementById('cardArea');
 // ═══════════════════════════════════════
 function renderCard(card) {
   // Front (Chinese)
-  const portraitHtml = card.image
-    ? `<div class="card-header-row"><img class="card-portrait" src="${card.image}" alt="${card.titleCn}" loading="lazy"><div class="card-header-text"><div class="card-title-cn">${card.titleCn}</div><div class="card-title-en">${card.titleEn}</div></div></div>`
-    : `<div class="card-title-cn">${card.titleCn}</div><div class="card-title-en">${card.titleEn}</div>`;
-
+  const pHtml = card.image ? `<div class="card-header-row"><img class="card-portrait" src="${card.image}" alt="${card.titleCn}" loading="lazy"><div class="card-header-text"><div class="card-title-cn">${card.titleCn}</div><div class="card-title-en">${card.titleEn}</div></div></div>` : `<div class="card-title-cn">${card.titleCn}</div><div class="card-title-en">${card.titleEn}</div>`;
   cardFront.innerHTML = `
     <div class="card-type">${card.typeLabelCn} · ${card.book}</div>
-    ${portraitHtml}
+    ${pHtml}
     <div class="card-body"><p>${card.frontBody}</p></div>
     <div class="card-anchor">
       <div class="card-anchor-label">💡 记忆锚点</div>
@@ -768,7 +837,7 @@ function renderCard(card) {
   // Back (English)
   cardBack.innerHTML = `
     <div class="card-type">${card.typeLabelEn} · Iliad</div>
-    ${portraitHtml}
+    ${pHtml}
     <div class="card-body"><p>${card.backBody}</p></div>
     <div class="card-anchor">
       <div class="card-anchor-label">💡 Memory Anchor</div>
@@ -866,88 +935,7 @@ function toggleShuffle() {
   }
   currentIndex = 0;
   updateUI();
-},
-  {
-    id: "hector", image: "images/hector.png",
-    titleCn: "赫克托耳", titleEn: "Hector",
-    type: "character", typeLabelCn: "人物", typeLabelEn: "Character", book: "伊利亚特", tags: ["人物"],
-    frontBody: "赫克托耳 \u2014 特洛伊的长子、全城最伟大的守护者。与阿喀琉斯不同，他的战斗不是为了个人荣耀，而是为了城邦与家人。他知道特洛伊终将陷落，却依然选择出战。他是《伊利亚特》中最具悲剧性的英雄：不是最强的，却是最清醒的。",
-    backBody: "Hector \u2014 Eldest son of Troy and its greatest defender. Unlike Achilles, he fights not for personal glory but for family and city. He knows Troy will fall, yet chooses to stand and fight. He is the Iliad's most tragic hero: not the strongest, but the most clear-eyed.",
-    anchor: "Hector = 明知必死仍出战的守护者 \u2014 不是最能打的，但是最值得尊敬的。"
-  },
-  {
-    id: "odysseus", image: "images/odysseus.png",
-    titleCn: "奥德修斯", titleEn: "Odysseus",
-    type: "character", typeLabelCn: "人物", typeLabelEn: "Character", book: "伊利亚特", tags: ["人物"],
-    frontBody: "奥德修斯 \u2014 伊塔卡国王，希腊联军中最狡猾的谋士。他不是靠蛮力取胜，而是靠话术、情报和策略。《伊利亚特》中他多次斡旋调停，是唯一能在阿喀琉斯和阿伽门农之间走钢丝的人。",
-    backBody: "Odysseus \u2014 King of Ithaca, the craftiest mind in the Greek coalition. He wins not by brute force but by rhetoric, intelligence, and strategy. In the Iliad he mediates between Achilles and Agamemnon \u2014 the only man who can walk the tightrope between them.",
-    anchor: "Odysseus = 脑力型核心 \u2014 不靠拳头靠脑子，青铜时代的首席战略官。"
-  },
-  {
-    id: "ajax_great", image: "images/ajax_great.png",
-    titleCn: "大埃阿斯", titleEn: "Ajax the Greater",
-    type: "character", typeLabelCn: "人物", typeLabelEn: "Character", book: "伊利亚特", tags: ["人物"],
-    frontBody: "大埃阿斯（忒拉蒙之子）\u2014 希腊方体型最庞大的战士，持一面七层牛皮巨盾，被称为\u201c希腊之墙\u201d。在阿喀琉斯罢工后，他是唯一能正面硬扛赫克托耳的人。纯粹的力量型英雄，不靠神助，只靠自己的身体和意志。",
-    backBody: "Ajax (son of Telamon) \u2014 The largest warrior among the Greeks, bearing a seven-layer oxhide shield, called 'the Wall of Greece.' After Achilles withdraws, he is the only one who can face Hector in direct combat. A pure strength hero \u2014 no divine backing, just body and will.",
-    anchor: "Ajax = 人形城墙 \u2014 没有外挂，没有神助，纯靠肉身扛线的硬汉。"
-  },
-  {
-    id: "priam", image: "images/priam.png",
-    titleCn: "普里阿摩斯", titleEn: "Priam",
-    type: "character", typeLabelCn: "人物", typeLabelEn: "Character", book: "伊利亚特", tags: ["人物"],
-    frontBody: "普里阿摩斯 \u2014 特洛伊老国王，赫克托耳的父亲。他最震撼的一幕在《伊利亚特》末尾：独自深夜前往敌营，亲吻杀死自己儿子的阿喀琉斯的手，请求归还赫克托耳的尸体。这一幕超越了战争本身，是全书最伟大的人性时刻。",
-    backBody: "Priam \u2014 Aged king of Troy, father of Hector. His most powerful moment comes at the Iliad's end: he enters the enemy camp alone at night, kisses the hands of the man who killed his son, and begs for Hector's body. It transcends war \u2014 the greatest moment of humanity in the entire epic.",
-    anchor: "Priam = 一个父亲的手 \u2014 亲吻杀子仇人的手，不是屈服，是比战争更高的人性。"
-  },
-  {
-    id: "helen", image: "images/helen.png",
-    titleCn: "海伦", titleEn: "Helen",
-    type: "character", typeLabelCn: "人物", typeLabelEn: "Character", book: "伊利亚特", tags: ["人物"],
-    frontBody: "海伦 \u2014 \u201c引发千帆出征的那张脸\u201d。荷马笔下的海伦并非简单的\u201c红颜祸水\u201d：她清醒地知道自己是战争的导火索，自我厌恶，却无力改变命运。她对帕里斯没有真正的爱，更像是被神意绑架的人质。",
-    backBody: "Helen \u2014 'The face that launched a thousand ships.' Homer's Helen is no simple femme fatale: she is painfully aware she is the cause of the war, full of self-loathing, yet powerless against fate. She has no real love for Paris \u2014 she is more a hostage of divine will.",
-    anchor: "Helen = 被命运绑架的清醒者 \u2014 她知道一切因她而起，却只能眼睁睁看着。"
-  },
-  {
-    id: "patroclus", image: "images/patroclus.png",
-    titleCn: "帕特罗克洛斯", titleEn: "Patroclus",
-    type: "character", typeLabelCn: "人物", typeLabelEn: "Character", book: "伊利亚特", tags: ["人物"],
-    frontBody: "帕特罗克洛斯 \u2014 阿喀琉斯最亲密的伴侣。他穿上阿喀琉斯的铠甲出战，一度扭转战局，却被赫克托耳击杀。他的死是全书的转折点：阿喀琉斯因此怒而复战，决定了特洛伊的命运。",
-    backBody: "Patroclus \u2014 Achilles' closest companion. He dons Achilles' armor and turns the tide of battle, only to be slain by Hector. His death is the Iliad's turning point: Achilles returns to battle in rage, sealing Troy's fate.",
-    anchor: "Patroclus = 用命换回战友的人 \u2014 他的死不是终点，是阿喀琉斯复战的扳机。"
-  },
-  {
-    id: "nestor", image: "images/nestor.png",
-    titleCn: "涅斯托尔", titleEn: "Nestor",
-    type: "character", typeLabelCn: "人物", typeLabelEn: "Character", book: "伊利亚特", tags: ["人物"],
-    frontBody: "涅斯托尔 \u2014 皮洛斯老王，希腊军中最年长的顾问。他最大的特点是\u201c话多\u201d：每次开会都要先讲一个自己年轻时的英雄故事，再给出建议。虽然常被嘲笑啰嗦，但他的经验和调解能力在关键时刻不可替代。",
-    backBody: "Nestor \u2014 King of Pylos, the oldest advisor in the Greek camp. His defining trait: he never gives advice without first telling a story from his youth. Often mocked for being long-winded, his experience and mediation skills are irreplaceable when crisis strikes.",
-    anchor: "Nestor = 万年老顾问 \u2014 \u201c我年轻的时候\u2026\u201d开头的建议，虽然啰嗦但每次都对。"
-  },
-  {
-    id: "zeus", image: "images/zeus.png",
-    titleCn: "宙斯", titleEn: "Zeus",
-    type: "character", typeLabelCn: "人物", typeLabelEn: "Character", book: "伊利亚特", tags: ["人物", "神话"],
-    frontBody: "宙斯 \u2014 众神之王，《伊利亚特》中唯一试图保持\u201c中立\u201d的神。他禁止其他神明直接参战，想让命运自行展开。但他自己也经不住赫拉的枕边风和忒提斯的哀求，反复摇摆。他是最高权力者，却也是最不自由的那个。",
-    backBody: "Zeus \u2014 King of the gods, the only deity in the Iliad who tries to stay neutral. He forbids direct divine intervention and wants fate to unfold naturally. But he cannot resist Hera's pleas or Thetis's supplication, wavering constantly. He holds supreme power yet is the least free of all.",
-    anchor: "Zeus = 想当中立裁判却做不到的最高领导 \u2014 权力越大，越不自由。"
-  },
-  {
-    id: "thetis", image: "images/thetis.png",
-    titleCn: "忒提斯", titleEn: "Thetis",
-    type: "character", typeLabelCn: "人物", typeLabelEn: "Character", book: "伊利亚特", tags: ["人物", "神话"],
-    frontBody: "忒提斯 \u2014 海洋女神，阿喀琉斯的母亲。她知道儿子注定早死（\u201c要么短暂而光荣，要么漫长而平庸\u201d），却无法改变命运。她能做的只有一次次上奥林波斯山求宙斯、请赫菲斯托斯锻造新铠甲。她是全书中最无力的母亲。",
-    backBody: "Thetis \u2014 Sea-goddess and mother of Achilles. She knows her son is doomed to die young ('short and glorious, or long and obscure') yet cannot change his fate. All she can do is climb Olympus to beg Zeus and commission Hephaestus for new armor. She is the most powerless mother in the epic.",
-    anchor: "Thetis = 知道结局却改变不了的母亲 \u2014 全部的爱都化成了\u201c能做的最后一件事\u201d。"
-  },
-  {
-    id: "briseis", image: "images/briseis.png",
-    titleCn: "布里塞伊斯", titleEn: "Briseis",
-    type: "character", typeLabelCn: "人物", typeLabelEn: "Character", book: "伊利亚特", tags: ["人物"],
-    frontBody: "布里塞伊斯 \u2014 原为特洛伊阵营阿波罗祭司之女，被希腊军俘虏后成为阿喀琉斯的战利品。阿伽门农强行夺走她，直接触发阿喀琉斯的罢工。她是两个最强男人争端的焦点，却几乎没有自己的声音\u2014\u2014她的沉默本身就是对战争最有力的控诉。",
-    backBody: "Briseis \u2014 Originally a priest's daughter from the Trojan side, captured by the Greeks and awarded to Achilles. When Agamemnon seizes her, it triggers Achilles' withdrawal. She is the focal point of the two most powerful men's quarrel, yet has almost no voice of her own \u2014 her silence is itself the strongest indictment of war.",
-    anchor: "Briseis = 沉默的焦点 \u2014 两个男人为她翻脸，但她自己连说话的机会都没有。"
-  }
-
+}
 
 // ═══════════════════════════════════════
 // Filters
