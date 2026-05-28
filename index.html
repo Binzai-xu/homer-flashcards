@@ -213,6 +213,28 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       margin-bottom: 12px; flex-shrink: 0;
     }
+    /* Concept cards: square image, larger */
+    .card-container.concept-type {
+      aspect-ratio: 3 / 4.2;
+    }
+    .card-portrait-concept {
+      max-width: 100%;
+      aspect-ratio: 1/1;
+      border-radius: 10px;
+      object-position: center center;
+      margin-bottom: 14px;
+      max-height: 220px;
+    }
+    .concept-type .card-header-row {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .concept-type .card-header-text {
+      text-align: left;
+    }
+    .concept-type .card-face {
+      padding: 20px 20px;
+    }
     .card-header-row {
       display: flex; flex-direction: column; align-items: center; gap: 10px; margin-bottom: 4px;
     }
@@ -415,6 +437,7 @@ const CARDS = [
   },
   {
     id: "golden_apple",
+    image: "images/golden_apple.png",
     titleCn: "金苹果比较陷阱",
     titleEn: "The Golden Apple Trap",
     type: "concept",
@@ -428,6 +451,7 @@ const CARDS = [
   },
   {
     id: "first_shot",
+    image: "images/first_shot.png",
     titleCn: "第一枪的道德红利",
     titleEn: "The Moral Dividend of the First Shot",
     type: "concept",
@@ -483,6 +507,7 @@ const CARDS = [
   },
   {
     id: "tenth_year_siege",
+    image: "images/tenth_year_siege.png",
     titleCn: "第十年（十年围城）",
     titleEn: "The Tenth Year",
     type: "concept",
@@ -566,6 +591,7 @@ const CARDS = [
   },
   {
     id: "double_motivation",
+    image: "images/double_motivation.png",
     titleCn: "双重动因",
     titleEn: "Double Motivation",
     type: "concept",
@@ -579,6 +605,7 @@ const CARDS = [
   },
   {
     id: "mortality_boundary",
+    image: "images/mortality_boundary.png",
     titleCn: "人神边界：必死性",
     titleEn: "Mortality Boundary",
     type: "concept",
@@ -592,6 +619,7 @@ const CARDS = [
   },
   {
     id: "body_ransom_war_law",
+    image: "images/body_ransom_war_law.png",
     titleCn: "尸体争夺的战争法则",
     titleEn: "Body, Armor, and Honor",
     type: "concept",
@@ -605,6 +633,7 @@ const CARDS = [
   },
   {
     id: "homeric_greek",
+    image: "images/homeric_greek.png",
     titleCn: "荷马希腊语",
     titleEn: "Homeric Greek",
     type: "concept",
@@ -618,6 +647,7 @@ const CARDS = [
   },
   {
     id: "bronze_age_ruins",
+    image: "images/bronze_age_ruins.png",
     titleCn: "青铜时代的废土回声",
     titleEn: "Bronze Age Ruins",
     type: "concept",
@@ -631,6 +661,7 @@ const CARDS = [
   },
   {
     id: "achaeans_danaans",
+    image: "images/achaeans_danaans.png",
     titleCn: "阿开奥斯人与达那奥斯人",
     titleEn: "Achaeans and Danaans",
     type: "concept",
@@ -644,6 +675,7 @@ const CARDS = [
   },
   {
     id: "dactylic_hexameter",
+    image: "images/dactylic_hexameter.png",
     titleCn: "六步长短格",
     titleEn: "Dactylic Hexameter",
     type: "concept",
@@ -657,6 +689,7 @@ const CARDS = [
   },
   {
     id: "homeric_simile",
+    image: "images/homeric_simile.png",
     titleCn: "荷马式比喻",
     titleEn: "Homeric Simile",
     type: "concept",
@@ -670,6 +703,7 @@ const CARDS = [
   },
   {
     id: "olympian_parasite_class",
+    image: "images/olympian_parasite_class.png",
     titleCn: "奥林波斯的寄生虫阶层",
     titleEn: "Olympian Parasite Class",
     type: "concept",
@@ -683,6 +717,7 @@ const CARDS = [
   },
   {
     id: "agamemnon_test_of_loyalty",
+    image: "images/agamemnon_test_of_loyalty.png",
     titleCn: "假撤退试探",
     titleEn: "Agamemnon's Test of Loyalty",
     type: "concept",
@@ -696,6 +731,7 @@ const CARDS = [
   },
   {
     id: "theban_epigoni",
+    image: "images/theban_epigoni.png",
     titleCn: "忒拜后嗣",
     titleEn: "Epigoni",
     type: "concept",
@@ -819,7 +855,8 @@ const cardArea = document.getElementById('cardArea');
 // ═══════════════════════════════════════
 function renderCard(card) {
   // Front (Chinese)
-  const pHtml = card.image ? `<div class="card-header-row"><img class="card-portrait" src="${card.image}" alt="${card.titleCn}" loading="lazy"><div class="card-header-text"><div class="card-title-cn">${card.titleCn}</div><div class="card-title-en">${card.titleEn}</div></div></div>` : `<div class="card-title-cn">${card.titleCn}</div><div class="card-title-en">${card.titleEn}</div>`;
+  const imgClass = card.type === "concept" ? "card-portrait card-portrait-concept" : "card-portrait";
+  const pHtml = card.image ? `<div class="card-header-row"><img class="${imgClass}" src="${card.image}" alt="${card.titleCn}" loading="lazy"><div class="card-header-text"><div class="card-title-cn">${card.titleCn}</div><div class="card-title-en">${card.titleEn}</div></div></div>` : `<div class="card-title-cn">${card.titleCn}</div><div class="card-title-en">${card.titleEn}</div>`;
   cardFront.innerHTML = `
     <div class="card-type">${card.typeLabelCn} · ${card.book}</div>
     ${pHtml}
@@ -883,9 +920,17 @@ function updateUI() {
   counter.textContent = `${currentIndex + 1} / ${filteredCards.length}`;
   progressFill.style.width = `${((currentIndex + 1) / filteredCards.length) * 100}%`;
 
+  // Toggle concept-type class for square image layout
+  const container = document.getElementById('cardContainer');
+  if (card.type === 'concept') {
+    container.classList.add('concept-type');
+  } else {
+    container.classList.remove('concept-type');
+  }
+
   // Reset flip
   isFlipped = false;
-  document.getElementById('cardContainer').classList.remove('flipped');
+  container.classList.remove('flipped');
 }
 
 // ═══════════════════════════════════════
